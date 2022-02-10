@@ -28,8 +28,8 @@ namespace ToDoAPI.Models
 
         public string ItemUpdated { get; set; }
 
-        [JsonIgnore]
 
+        [JsonIgnore]
         [ForeignKey("UserId")]
         public ApplicationUser User { get; set; }
 

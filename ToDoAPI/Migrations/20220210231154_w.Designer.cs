@@ -10,8 +10,8 @@ using ToDoAPI.Models;
 namespace ToDoAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220210132241_qwe12")]
-    partial class qwe12
+    [Migration("20220210231154_w")]
+    partial class w
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -255,11 +255,29 @@ namespace ToDoAPI.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("text");
 
+                    b.Property<string>("UserId1")
+                        .HasColumnType("text");
+
                     b.HasKey("ItemId");
 
                     b.HasIndex("UserId");
 
+                    b.HasIndex("UserId1");
+
                     b.ToTable("ToDoItems");
+                });
+
+            modelBuilder.Entity("ToDoAPI.Models.User", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("text");
+
+                    b.HasKey("UserId");
+
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -319,10 +337,19 @@ namespace ToDoAPI.Migrations
                         .WithMany("Items")
                         .HasForeignKey("UserId");
 
+                    b.HasOne("ToDoAPI.Models.User", null)
+                        .WithMany("Items")
+                        .HasForeignKey("UserId1");
+
                     b.Navigation("User");
                 });
 
             modelBuilder.Entity("ToDoAPI.Authentication.ApplicationUser", b =>
+                {
+                    b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("ToDoAPI.Models.User", b =>
                 {
                     b.Navigation("Items");
                 });

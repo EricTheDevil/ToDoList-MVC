@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace ToDoAPI.Migrations
 {
-    public partial class qwe1 : Migration
+    public partial class w : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -47,6 +47,18 @@ namespace ToDoAPI.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "User",
+                columns: table => new
+                {
+                    UserId = table.Column<string>(type: "text", nullable: false),
+                    UserName = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_User", x => x.UserId);
                 });
 
             migrationBuilder.CreateTable(
@@ -166,7 +178,8 @@ namespace ToDoAPI.Migrations
                     ItemStatus = table.Column<string>(type: "text", nullable: false),
                     ItemCreated = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: false),
                     ItemUpdated = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: false),
-                    UserId = table.Column<string>(type: "text", nullable: true)
+                    UserId = table.Column<string>(type: "text", nullable: true),
+                    UserId1 = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -176,6 +189,12 @@ namespace ToDoAPI.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ToDoItems_User_UserId1",
+                        column: x => x.UserId1,
+                        principalTable: "User",
+                        principalColumn: "UserId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -220,6 +239,11 @@ namespace ToDoAPI.Migrations
                 name: "IX_ToDoItems_UserId",
                 table: "ToDoItems",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ToDoItems_UserId1",
+                table: "ToDoItems",
+                column: "UserId1");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -247,6 +271,9 @@ namespace ToDoAPI.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "User");
         }
     }
 }
