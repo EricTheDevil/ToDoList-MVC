@@ -13,7 +13,7 @@ using ToDoAPI.Models;
 namespace ToDoAPI.Controllers
 {
    // [Authorize]
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class ToDoItemController : ControllerBase
     {
@@ -35,9 +35,7 @@ namespace ToDoAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ToDoItemModel>>> GetToDoItems()
         {
-
-            // Summary = Summaries[rng.Next(Summaries.Length)]
-            System.Diagnostics.Debug.WriteLine(_context.ToDoItems);
+    
             return await _context.ToDoItems.ToListAsync();
         }
 
@@ -46,6 +44,18 @@ namespace ToDoAPI.Controllers
         public async Task<ActionResult<ToDoItemModel>> GetToDoItemModel(int id)
         {
             var toDoItemModel = await _context.ToDoItems.FindAsync(id);
+
+            if (toDoItemModel == null)
+            {
+                return NotFound();
+            }
+
+            return toDoItemModel;
+        }
+        [HttpGet("status={status}")]
+        public async Task<ActionResult<IEnumerable<ToDoItemModel>>> GetToDoItemStatus(string status)
+        {
+            var toDoItemModel = await _context.ToDoItems.Where(s=> s.ItemStatus == status).ToListAsync(); ;
 
             if (toDoItemModel == null)
             {
@@ -64,7 +74,7 @@ namespace ToDoAPI.Controllers
             {
                 return BadRequest();
             }
-
+            toDoItemModel.ItemUpdated = DateTime.Now.ToString("yyyy-MM-dd");
             _context.Entry(toDoItemModel).State = EntityState.Modified;
 
             try
@@ -90,8 +100,8 @@ namespace ToDoAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<ToDoItemModel>> PostToDoItemModel(ToDoItemModel toDoItemModel)
         {
-
-            _context.ToDoItems.Add(toDoItemModel);
+            toDoItemModel.ItemCreated = DateTime.Now.ToString("yyyy-MM-dd");
+            toDoItemModel.ItemUpdated = DateTime.Now.ToString("yyyy-MM-dd");
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetToDoItemModel", new { id = toDoItemModel.ItemId }, toDoItemModel);
