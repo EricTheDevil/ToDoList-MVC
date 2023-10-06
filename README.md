@@ -1,4 +1,5 @@
 ToDoList-MVC with PostgreSQL and Entity Framework
+
 Table of Contents
 Introduction
 Prerequisites
@@ -15,9 +16,6 @@ Prerequisites
 PostgreSQL Database
 Postman (for API testing)
 Installation
-Clone the Repository
-
-git clone <repository_url>
 Configure PostgreSQL Database
 
 Create a new PostgreSQL database with the following parameters:
